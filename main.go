@@ -1,17 +1,12 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
-
 func main() {
-	fmt.Println("Hello World")
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World")
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	//app, err := InitializeApplication()
+	//if err != nil {
+	//	log.Fatal("Failed to initialize application: ", err)
+	//}
+	//
+	//if err := app.Listen(":8080"); err != nil {
+	//	log.Fatal("Failed to start server:", err)
+	//}
 }
