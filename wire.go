@@ -20,10 +20,6 @@ func InitializeDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	//if err := infrastructure.SeedPremiumPackages(db); err != nil {
-	//	return nil, err
-	//}
-
 	return connection, nil
 }
 

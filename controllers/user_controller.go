@@ -13,6 +13,6 @@ func NewUserController(userUsecase *usecases.UserUsecase) *UserController {
 	return &UserController{UserUsecase: userUsecase}
 }
 
-func (v *UserController) Signup(c *fiber.Ctx) error {
+func (v *UserController) Signin(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{})
 }
