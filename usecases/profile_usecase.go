@@ -20,3 +20,9 @@ func (profileUseCase *ProfileUsecase) CollectionProfile() ([]entities.Profile, e
 
 	return profile, err
 }
+
+func (profileUseCase *ProfileUsecase) DocumentProfile(id uint) (*entities.Profile, error) {
+	profile, err := profileUseCase.ProfileRepository.DocumentProfile(id)
+
+	return profile, err
+}

@@ -7,6 +7,8 @@ import (
 
 type ProfileRepository interface {
 	CollectionProfile() ([]entities.Profile, error)
+
+	DocumentProfile(id uint) (*entities.Profile, error)
 }
 
 type ProfileRepositoryImpl struct {
@@ -23,4 +25,14 @@ func (p *ProfileRepositoryImpl) CollectionProfile() ([]entities.Profile, error) 
 	err := p.db.Find(&profiles).Error
 
 	return profiles, err
+}
+
+func (p *ProfileRepositoryImpl) DocumentProfile(id uint) (*entities.Profile, error) {
+	var profile entities.Profile
+
+	if err := p.db.First(&profile, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
 }

@@ -3,7 +3,6 @@ package middleware
 import (
 	"api_crud/entities"
 	"api_crud/repository"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -20,12 +19,11 @@ func RBACMiddleware(userRepository repository.UserRepository, permission string)
 		userID, ok := userIDRaw.(uint)
 		if !ok {
 			return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
-				Message: "Invalid user ID format",
+				Message: "Invalid user ID",
 				Data:    nil,
 			})
 		}
 
-		fmt.Println(userRepository.HasAccess(userID, permission))
 		if !userRepository.HasAccess(userID, permission) {
 			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
 				"error": "Permission denied",

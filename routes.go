@@ -22,6 +22,7 @@ func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userC
 			profile := v1.Group("/profile", middleware.JWTAuthMiddleware)
 			{
 				profile.Get("/", middleware.RBACMiddleware(userRepository, "read"), profileController.CollectionProfile)
+				profile.Get("/:id", middleware.RBACMiddleware(userRepository, "read"), profileController.DocumentProfile)
 			}
 		}
 	}
