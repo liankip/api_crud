@@ -11,6 +11,8 @@ type UserRepository interface {
 	FindUserByEmail(email *string) (*entities.User, error)
 
 	CreateUser(user *entities.User) error
+
+	HasAccess(userID int, accessName string) bool
 }
 
 type UserRepositoryImpl struct {
@@ -41,4 +43,21 @@ func (repository *UserRepositoryImpl) CreateUser(user *entities.User) error {
 	}
 
 	return result.Error
+}
+
+func (repository *UserRepositoryImpl) HasAccess(userID int, accessName string) bool {
+	var count int
+	query := `SELECT COUNT(*)
+    FROM users u
+    JOIN user_role ur ON u.id = ur.user_id
+    JOIN role_access ra ON ur.role_id = ra.role_id
+    JOIN access a ON ra.access_id = a.access_id
+    WHERE u.id = $1 AND a.access_name = $2`
+
+	err := repository.db.Raw(query, userID, accessName).Scan(&count)
+	if err != nil {
+		return false
+	}
+
+	return count > 0
 }
