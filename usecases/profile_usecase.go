@@ -26,3 +26,9 @@ func (profileUseCase *ProfileUsecase) DocumentProfile(id uint) (*entities.Profil
 
 	return profile, err
 }
+
+func (profileUseCase *ProfileUsecase) CreateProfile(createProfile entities.CreateProfile) (*entities.Profile, error) {
+	profile, err := profileUseCase.ProfileRepository.CreateProfile(createProfile)
+
+	return profile, err
+}

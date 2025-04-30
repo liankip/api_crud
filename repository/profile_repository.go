@@ -2,6 +2,8 @@ package repository
 
 import (
 	"api_crud/entities"
+	"errors"
+
 	"gorm.io/gorm"
 )
 
@@ -9,6 +11,8 @@ type ProfileRepository interface {
 	CollectionProfile() ([]entities.Profile, error)
 
 	DocumentProfile(id uint) (*entities.Profile, error)
+
+	CreateProfile(profile entities.CreateProfile) (*entities.Profile, error)
 }
 
 type ProfileRepositoryImpl struct {
@@ -35,4 +39,23 @@ func (p *ProfileRepositoryImpl) DocumentProfile(id uint) (*entities.Profile, err
 	}
 
 	return &profile, nil
+}
+
+func (p *ProfileRepositoryImpl) CreateProfile(profile entities.CreateProfile) (*entities.Profile, error) {
+	var createProfile entities.Profile
+
+	err := p.db.Where("user_id = ?", profile.UserID).First(&createProfile).Error
+	if err != nil {
+		return nil, errors.New("profile already exists")
+	}
+
+	createProfile.UserID = profile.UserID
+	createProfile.Bio = profile.Bio
+	createProfile.AvatarURL = profile.AvatarUrl
+
+	if err := p.db.Create(&createProfile).Error; err != nil {
+		return nil, err
+	}
+
+	return &createProfile, nil
 }

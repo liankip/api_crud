@@ -23,6 +23,11 @@ func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userC
 			{
 				profile.Get("/", middleware.RBACMiddleware(userRepository, "read"), profileController.CollectionProfile)
 				profile.Get("/:id", middleware.RBACMiddleware(userRepository, "read"), profileController.DocumentProfile)
+
+				management := profile.Group("/management/")
+				{
+					management.Post("/", middleware.RBACMiddleware(userRepository, "create"), profileController.CreateProfile)
+				}
 			}
 		}
 	}
