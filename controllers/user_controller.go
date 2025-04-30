@@ -35,7 +35,7 @@ func (v *UserController) Signin(c *fiber.Ctx) error {
 		})
 	}
 
-	user, err := v.UserUsecase.Signin(&input.Email, input.Password)
+	user, err := v.UserUsecase.Signin(input)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
 			Message: err.Error(),
@@ -59,5 +59,35 @@ func (v *UserController) Signin(c *fiber.Ctx) error {
 	return c.JSON(entities.Response{
 		Message: "Signin successful",
 		Data:    combinedData,
+	})
+}
+
+func (v *UserController) Signup(c *fiber.Ctx) error {
+	var input entities.Signup
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: "Invalid input format",
+			Data:    err.Error(),
+		})
+	}
+
+	if err := validate.Struct(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: "Validation failed",
+			Data:    err.Error(),
+		})
+	}
+
+	if err := v.UserUsecase.Signup(input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: err.Error(),
+			Data:    []string{},
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(entities.Response{
+		Message: "Signup successful",
+		Data:    []string{},
 	})
 }

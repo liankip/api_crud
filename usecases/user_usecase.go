@@ -17,12 +17,30 @@ func NewUserUsecase(userRepository repository.UserRepository) *UserUsecase {
 	}
 }
 
-func (userUseCase *UserUsecase) Signin(email *string, password string) (*entities.User, error) {
-	user, err := userUseCase.UserRepository.FindUserByEmail(email)
+func (userUseCase *UserUsecase) Signin(signin entities.Signin) (*entities.User, error) {
+	user, err := userUseCase.UserRepository.FindUserByEmail(&signin.Email)
 
-	if err != nil || !utils.CheckPasswordHash(password, user.Password) {
+	if err != nil || !utils.CheckPasswordHash(signin.Password, user.Password) {
 		return nil, errors.New("invalid credentials")
 	}
 
 	return user, nil
+}
+
+func (userUseCase *UserUsecase) Signup(signup entities.Signup) error {
+	_, err := userUseCase.UserRepository.FindUserByEmail(signup.Email)
+
+	if err == nil {
+		return errors.New("user already exists")
+	}
+
+	password, _ := utils.HashPassword(signup.Password)
+
+	user := &entities.User{
+		Username: signup.Username,
+		Email:    signup.Email,
+		Password: password,
+	}
+
+	return userUseCase.UserRepository.CreateUser(user)
 }
