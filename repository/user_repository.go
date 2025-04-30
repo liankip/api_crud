@@ -12,7 +12,7 @@ type UserRepository interface {
 
 	CreateUser(user *entities.User) error
 
-	HasAccess(userID int, accessName string) bool
+	HasAccess(userID uint, accessName string) bool
 }
 
 type UserRepositoryImpl struct {
@@ -45,16 +45,18 @@ func (repository *UserRepositoryImpl) CreateUser(user *entities.User) error {
 	return result.Error
 }
 
-func (repository *UserRepositoryImpl) HasAccess(userID int, accessName string) bool {
-	var count int
-	query := `SELECT COUNT(*)
-    FROM users u
-    JOIN user_role ur ON u.id = ur.user_id
-    JOIN role_access ra ON ur.role_id = ra.role_id
-    JOIN access a ON ra.access_id = a.access_id
-    WHERE u.id = $1 AND a.access_name = $2`
+func (repository *UserRepositoryImpl) HasAccess(userID uint, accessName string) bool {
+	var count int64
 
-	err := repository.db.Raw(query, userID, accessName).Scan(&count)
+	err := repository.db.
+		Table("users").
+		Joins("JOIN user_role ON users.id = user_role.user_id").
+		Joins("JOIN role_access ON user_role.role_id = role_access.role_id").
+		Joins("JOIN access ON role_access.access_id = access.access_id").
+		Where("users.id = ?", userID).
+		Where("access.access_name = ?", accessName).
+		Count(&count).Error
+
 	if err != nil {
 		return false
 	}

@@ -2,10 +2,12 @@ package main
 
 import (
 	"api_crud/controllers"
+	"api_crud/middleware"
+	"api_crud/repository"
 	"github.com/gofiber/fiber/v2"
 )
 
-func SetupRoutes(app *fiber.App, userController *controllers.UserController) {
+func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userController *controllers.UserController, profileController *controllers.ProfileController) {
 
 	api := app.Group("/api")
 	{
@@ -15,6 +17,11 @@ func SetupRoutes(app *fiber.App, userController *controllers.UserController) {
 			{
 				auth.Post("/signin", userController.Signin)
 				auth.Post("/signup", userController.Signup)
+			}
+
+			profile := v1.Group("/profile", middleware.JWTAuthMiddleware)
+			{
+				profile.Get("/", middleware.RBACMiddleware(userRepository, "read"), profileController.CollectionProfile)
 			}
 		}
 	}

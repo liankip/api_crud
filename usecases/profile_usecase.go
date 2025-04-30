@@ -1,0 +1,22 @@
+package usecases
+
+import (
+	"api_crud/entities"
+	"api_crud/repository"
+)
+
+type ProfileUsecase struct {
+	ProfileRepository repository.ProfileRepository
+}
+
+func NewProfileUsecase(profileRepository repository.ProfileRepository) *ProfileUsecase {
+	return &ProfileUsecase{
+		ProfileRepository: profileRepository,
+	}
+}
+
+func (profileUseCase *ProfileUsecase) CollectionProfile() ([]entities.Profile, error) {
+	profile, err := profileUseCase.ProfileRepository.CollectionProfile()
+
+	return profile, err
+}

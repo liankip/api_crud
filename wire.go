@@ -25,14 +25,17 @@ func InitializeDB() (*gorm.DB, error) {
 
 var RepositorySet = wire.NewSet(
 	repository.NewUserRepository,
+	repository.NewProfileRepository,
 )
 
 var UsecaseSet = wire.NewSet(
 	usecases.NewUserUsecase,
+	usecases.NewProfileUsecase,
 )
 
 var ControllerSet = wire.NewSet(
 	controllers.NewUserController,
+	controllers.NewProfileController,
 )
 
 func InitializeApplication() (*fiber.App, error) {
@@ -46,8 +49,8 @@ func InitializeApplication() (*fiber.App, error) {
 	return &fiber.App{}, nil
 }
 
-func NewApp(userController *controllers.UserController) *fiber.App {
+func NewApp(userRepository repository.UserRepository, userController *controllers.UserController, profileController *controllers.ProfileController) *fiber.App {
 	app := fiber.New()
-	SetupRoutes(app, userController)
+	SetupRoutes(app, userRepository, userController, profileController)
 	return app
 }
