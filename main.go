@@ -1,17 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
+import "github.com/gofiber/fiber/v2/log"
 
 func main() {
-	fmt.Println("Hello World")
+	app, err := InitializeApplication()
+	if err != nil {
+		log.Fatal("Failed to initialize application: ", err)
+	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World")
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	if err := app.Listen(":8080"); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
