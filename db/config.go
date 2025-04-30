@@ -13,7 +13,7 @@ func ConnectDB(dataSourceName string) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	fmt.Println("Connecting to database...")
+	fmt.Println("Database connection established")
 
 	return db, nil
 }

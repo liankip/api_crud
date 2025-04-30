@@ -14,6 +14,7 @@ func SetupRoutes(app *fiber.App, userController *controllers.UserController) {
 			auth := v1.Group("/auth")
 			{
 				auth.Post("/signin", userController.Signin)
+				auth.Post("/signup", userController.Signup)
 			}
 		}
 	}
