@@ -1,6 +1,8 @@
 package main
 
-import "github.com/gofiber/fiber/v2/log"
+import (
+	"github.com/gofiber/fiber/v2/log"
+)
 
 func main() {
 	app, err := InitializeApplication()

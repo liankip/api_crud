@@ -1,16 +1,16 @@
-FROM golang:latest
-RUN mkdir /app
+FROM golang:1.24-alpine
 
-ADD . /app
+RUN apk add --no-cache git
 
 WORKDIR /app
 
-RUN go install github.com/air-verse/air@latest
-RUN go get github.com/gofiber/fiber/v2
-RUN go get -u gorm.io/gorm
-RUN go get -u gorm.io/driver/mysql
-
-COPY go.mod ./
+COPY go.mod go.sum ./
 RUN go mod download
+
+COPY . .
+
+RUN go install github.com/air-verse/air@latest
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
+RUN go install github.com/google/wire/cmd/wire@latest
 
 CMD ["air", "-c", ".air.toml"]
