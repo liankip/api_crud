@@ -26,7 +26,10 @@ func InitializeApplication() (*fiber.App, error) {
 	userRepository := repository.NewUserRepository(db)
 	userUsecase := usecases.NewUserUsecase(userRepository)
 	userController := controllers.NewUserController(userUsecase)
-	app := NewApp(userController)
+	profileRepository := repository.NewProfileRepository(db)
+	profileUsecase := usecases.NewProfileUsecase(profileRepository)
+	profileController := controllers.NewProfileController(profileUsecase)
+	app := NewApp(userRepository, userController, profileController)
 	return app, nil
 }
 
@@ -41,14 +44,14 @@ func InitializeDB() (*gorm.DB, error) {
 	return connection, nil
 }
 
-var RepositorySet = wire.NewSet(repository.NewUserRepository)
+var RepositorySet = wire.NewSet(repository.NewUserRepository, repository.NewProfileRepository)
 
-var UsecaseSet = wire.NewSet(usecases.NewUserUsecase)
+var UsecaseSet = wire.NewSet(usecases.NewUserUsecase, usecases.NewProfileUsecase)
 
-var ControllerSet = wire.NewSet(controllers.NewUserController)
+var ControllerSet = wire.NewSet(controllers.NewUserController, controllers.NewProfileController)
 
-func NewApp(userController *controllers.UserController) *fiber.App {
+func NewApp(userRepository repository.UserRepository, userController *controllers.UserController, profileController *controllers.ProfileController) *fiber.App {
 	app := fiber.New()
-	SetupRoutes(app, userController)
+	SetupRoutes(app, userRepository, userController, profileController)
 	return app
 }

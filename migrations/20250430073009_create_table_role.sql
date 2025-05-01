@@ -13,5 +13,5 @@ INSERT INTO role (role_id, role_name) VALUES
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE role
 -- +goose StatementEnd

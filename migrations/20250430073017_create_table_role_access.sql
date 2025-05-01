@@ -13,11 +13,12 @@ INSERT INTO role_access (role_id, access_id) VALUES
     (1, 2), -- admin: read
     (1, 3), -- admin: update
     (1, 4), -- admin: delete
+    (2, 1), -- member: create
     (2, 2), -- member: read
     (2, 3), -- member: update
     (3, 2); -- guest: read
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE role_access
 -- +goose StatementEnd

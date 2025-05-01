@@ -14,5 +14,5 @@ INSERT INTO access (access_id, access_name) VALUES
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE access
 -- +goose StatementEnd
