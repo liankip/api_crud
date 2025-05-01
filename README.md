@@ -61,15 +61,84 @@
 - Create feature read delete profile
 
 ## Endpoints API
-1. Signin
-    ```
-   ![img.png](./images/img.png)
+**1. Signin [GET]**
    ```
+   localhost:8080/api/v1/auth/signin
+   
+   body:
+      - email
+      - password
+   ```
+   ![img_2.png](img_2.png)
 
-2. Signup
-3. Collection Profile
-4. Document Profile
-5. Create Profile
-6. Update Profile
-7. Delete Profile
+**2. Signup [GET]**
+   ```
+   http://localhost:8080/api/v1/auth/signup
 
+   body:
+      - username
+      - email
+      - password
+   ```
+   ![img_1.png](img_1.png)
+
+**3. Collection Profile [GET]**
+   ```
+   http://localhost:8080/api/v1/profile/
+   
+   Header:
+      - Authorization: (from signin token)
+   ```
+   ![img_3.png](img_3.png)
+
+**4. Document Profile [GET]**
+   ```
+   http://localhost:8080/api/v1/profile/:id_profile
+   
+   Header:
+      - Authorization: (from signin token)
+   ```
+   ![img_4.png](img_4.png)
+
+**5. Create Profile [POST]**
+   ```
+   http://localhost:8080/api/v1/profile/management
+   
+   Header:
+      - Authorization: (from signin token)
+   Body:
+      - Bio
+      - AvatarUrl
+   ```
+   ![img_5.png](img_5.png)
+
+**6. Update Profile [PUT]**
+   ```
+   http://localhost:8080/api/v1/profile/management
+   
+   Header:
+      - Authorization: (from signin token)
+   Body:
+      - Bio
+      - AvatarUrl
+   ```
+   ![img_7.png](img_7.png)
+   ![img_6.png](img_6.png)
+
+**7. Delete Profile [DELETE]**
+   ```
+   http://localhost:8080/api/v1/profile/management
+   
+   Header:
+      - Authorization: (from signin token)
+   ```
+   ![img_8.png](img_8.png)
+   
+## Note
+for RBAC add manualy on table user_role, example:
+1 - admin
+2 - member 
+3 - guest
+```
+INSERT INTO user_role (user_id, role_id) VALUES (1, 1)
+```
