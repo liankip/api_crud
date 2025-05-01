@@ -13,6 +13,8 @@ type ProfileRepository interface {
 	DocumentProfile(id uint) (*entities.Profile, error)
 
 	CreateProfile(profile entities.CreateProfile) (*entities.Profile, error)
+
+	UpdateProfile(profile entities.UpdateProfile) (*entities.Profile, error)
 }
 
 type ProfileRepositoryImpl struct {
@@ -58,4 +60,22 @@ func (p *ProfileRepositoryImpl) CreateProfile(profile entities.CreateProfile) (*
 	}
 
 	return &createProfile, nil
+}
+
+func (p *ProfileRepositoryImpl) UpdateProfile(profile entities.UpdateProfile) (*entities.Profile, error) {
+	var updateProfile entities.Profile
+
+	err := p.db.Where("user_id = ?", profile.UserID).First(&updateProfile).Error
+	if err != nil {
+		return nil, errors.New("profile doesnt exists")
+	}
+
+	updateProfile.Bio = profile.Bio
+	updateProfile.AvatarURL = profile.AvatarUrl
+
+	if err := p.db.Save(&updateProfile).Error; err != nil {
+		return nil, err
+	}
+
+	return &updateProfile, nil
 }

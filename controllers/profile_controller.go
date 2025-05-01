@@ -80,3 +80,33 @@ func (v *ProfileController) CreateProfile(c *fiber.Ctx) error {
 		Data:    profile,
 	})
 }
+
+func (v *ProfileController) UpdateProfile(c *fiber.Ctx) error {
+	userID := c.Locals("userID")
+	var input entities.UpdateProfile
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: "Invalid input format",
+			Data:    err.Error(),
+		})
+	}
+
+	profile, err := v.ProfileUsecase.UpdateProfile(entities.UpdateProfile{
+		UserID:    userID.(uint),
+		Bio:       input.Bio,
+		AvatarUrl: input.AvatarUrl,
+	})
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: "Profile Update failed",
+			Data:    err.Error(),
+		})
+	}
+
+	return c.JSON(entities.Response{
+		Message: "Profile Update successful",
+		Data:    profile,
+	})
+}

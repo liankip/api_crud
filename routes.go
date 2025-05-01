@@ -27,6 +27,7 @@ func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userC
 				management := profile.Group("/management/")
 				{
 					management.Post("/", middleware.RBACMiddleware(userRepository, "create"), profileController.CreateProfile)
+					management.Put("/", middleware.RBACMiddleware(userRepository, "update"), profileController.UpdateProfile)
 				}
 			}
 		}

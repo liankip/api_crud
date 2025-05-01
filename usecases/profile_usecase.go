@@ -32,3 +32,9 @@ func (profileUseCase *ProfileUsecase) CreateProfile(createProfile entities.Creat
 
 	return profile, err
 }
+
+func (profileUseCase *ProfileUsecase) UpdateProfile(updateProfile entities.UpdateProfile) (*entities.Profile, error) {
+	profile, err := profileUseCase.ProfileRepository.UpdateProfile(updateProfile)
+
+	return profile, err
+}
