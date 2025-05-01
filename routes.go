@@ -28,6 +28,7 @@ func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userC
 				{
 					management.Post("/", middleware.RBACMiddleware(userRepository, "create"), profileController.CreateProfile)
 					management.Put("/", middleware.RBACMiddleware(userRepository, "update"), profileController.UpdateProfile)
+					management.Delete("/", middleware.RBACMiddleware(userRepository, "delete"), profileController.DeleteProfile)
 				}
 			}
 		}

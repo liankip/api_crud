@@ -15,6 +15,8 @@ type ProfileRepository interface {
 	CreateProfile(profile entities.CreateProfile) (*entities.Profile, error)
 
 	UpdateProfile(profile entities.UpdateProfile) (*entities.Profile, error)
+
+	DeleteProfile(userID uint) error
 }
 
 type ProfileRepositoryImpl struct {
@@ -78,4 +80,19 @@ func (p *ProfileRepositoryImpl) UpdateProfile(profile entities.UpdateProfile) (*
 	}
 
 	return &updateProfile, nil
+}
+
+func (p *ProfileRepositoryImpl) DeleteProfile(userID uint) error {
+	var profile entities.Profile
+
+	err := p.db.Where("user_id = ?", userID).First(&profile).Error
+	if err != nil {
+		return errors.New("profile doesnt exists")
+	}
+
+	if err := p.db.Delete(&profile).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

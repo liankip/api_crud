@@ -110,3 +110,20 @@ func (v *ProfileController) UpdateProfile(c *fiber.Ctx) error {
 		Data:    profile,
 	})
 }
+
+func (v *ProfileController) DeleteProfile(c *fiber.Ctx) error {
+	userID := c.Locals("userID")
+	err := v.ProfileUsecase.DeleteProfile(userID.(uint))
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.Response{
+			Message: "Profile Delete failed",
+			Data:    err.Error(),
+		})
+	}
+
+	return c.JSON(entities.Response{
+		Message: "Profile Delete successful",
+		Data:    nil,
+	})
+}

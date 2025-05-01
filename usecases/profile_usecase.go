@@ -38,3 +38,9 @@ func (profileUseCase *ProfileUsecase) UpdateProfile(updateProfile entities.Updat
 
 	return profile, err
 }
+
+func (profileUseCase *ProfileUsecase) DeleteProfile(userID uint) error {
+	err := profileUseCase.ProfileRepository.DeleteProfile(userID)
+
+	return err
+}
