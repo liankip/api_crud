@@ -13,6 +13,12 @@ func SetupRoutes(app *fiber.App, userRepository repository.UserRepository, userC
 	{
 		v1 := api.Group("/v1")
 		{
+			v1.Get("/", func(ctx *fiber.Ctx) error {
+				return ctx.JSON(fiber.Map{
+					"message": "api/v1",
+				})
+			})
+
 			auth := v1.Group("/auth")
 			{
 				auth.Post("/signin", userController.Signin)
